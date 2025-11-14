@@ -59,10 +59,10 @@ form.addEventListener("submit", async (e) => {
                 window.location.href = "CustomerDashboard.html";
             } 
             else if (result.user && result.user.role === "restaurant-owner") {
-                window.location.href = "RestaurantOwner.html";
+                window.location.href = "RestaurantDashboard.html";
             } 
             else {
-                window.location.href = "index.html"; 
+                window.location.href = "Main.html"; 
             }
         }, 1500);
 

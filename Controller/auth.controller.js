@@ -35,16 +35,30 @@ async function signup(req, res) {
 
         const hashed = await bcrypt.hash(password, 10);
         let user;
-
         if (role === "customer") {
             user = await prisma.user.create({
-                data: { email, password: hashed }
+                data: { 
+                    email,
+                    password: hashed,
+                    name: "",
+                    address: "",
+                    phone: ""
+                }
             });
-        } else if (role === "restaurant-owner") {
+        }
+
+        else if (role === "restaurant-owner") { 
             user = await prisma.restaurant.create({
-                data: { email, password: hashed }
+                data: { 
+                    email,
+                    password: hashed,
+                    name: "New Restaurant",
+                    address: "Not added",
+                    phone: ""
+                }
             });
-        } else {
+        }
+     else {
             return res.json({ success: false, message: "Invalid role" });
         }
 

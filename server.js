@@ -10,7 +10,7 @@ const authRoutes = require("./Routes/auth.routes");
 const ordersRoutes = require("./Routes/orders.routes");
 const restaurantRoutes = require("./Routes/restaurant.routes");
 const menuRoutes = require("./Routes/menu.routes");
-
+const updateRoutes=require("./Routes/UpdateRoutes")
 const app = express();
 
 // Middleware
@@ -31,7 +31,7 @@ app.use("/api", authRoutes);
 app.use("/api", ordersRoutes);
 app.use("/api", restaurantRoutes);
 app.use("/api", menuRoutes);
-
+app.use("/api",updateRoutes)
 
 
 const PORT = process.env.PORT || 6789;
