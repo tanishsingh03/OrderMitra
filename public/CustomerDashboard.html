@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Restaurants | OrderMitra</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link
+  rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <header class="header" role="banner">
+    <div class="container header-container">
+      <a href="#" class="logo" aria-label="OrderMitra homepage">
+        <i class="fas fa-utensils"></i>
+        <span>OrderMitra</span>
+      </a>
+
+      <nav aria-label="Primary menu" class="navbar">
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How it Works</a></li>
+          <li><a href="#restaurants">Restaurants</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="signup.html" class="btn-signup" aria-label="Sign in">Sign Up</a>
+        <button class="btn-getstarted" aria-label="Get started">Get Started</button>
+        <a href="Profile.html"><i class="fa-solid fa-user" id="profile"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero with Search -->
+    <section class="container hero" role="main" aria-labelledby="heroTitle">
+      <div class="hero-content">
+        <h1 id="heroTitle">Discover All Restaurants</h1>
+        <p>Find your favorite cuisines and order from hundreds of restaurants near you.</p>
+        <div class="search-bar" id="search">
+          <input type="text" id="searchInput" placeholder="Search by restaurant name or cuisine..." aria-label="Search restaurants" />
+          <button class="btn-search" aria-label="Search">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Restaurants -->
+    <section id="restaurants" class="container all-restaurants" aria-labelledby="restaurantsTitle">
+      <h2 id="restaurantsTitle">All Restaurants</h2>
+      <p>Browse and order from our full list of partnered restaurants.</p>
+      <div class="restaurant-grid" id="restaurantGrid">
+        <!-- Restaurant 1 -->
+        <article class="restaurant-card" data-name="Urban Foodies" data-cuisine="Italian, Pizza">
+          <img src="https://uk.ooni.com/cdn/shop/articles/20220211142645-margherita-9920_e41233d5-dcec-461c-b07e-03245f031dfe.jpg?v=1737105431" alt="Restaurant 1" />
+          <div class="rest-info">
+            <h3>Urban Foodies</h3>
+            <p class="cuisines">Italian, Pizza, Pasta</p>
+            <div class="details">
+              <span>25–30 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.6 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.6
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Pizza Palace">View Menu</button>
+        </article>
+
+        <!-- Restaurant 2 -->
+        <article class="restaurant-card" data-name="Raunak" data-cuisine="American, Burgers">
+         
+ <img src="https://lentillovingfamily.com/wp-content/uploads/2025/08/paneer-tikka-2.jpg" alt="Restaurant 2" />
+          <div class="rest-info">
+            <h3>Hotel Raunak</h3>
+            <p class="cuisines">Indian, Burgers, Fries</p>
+            <div class="details">
+              <span>20–25 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.7 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.7
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Burger Barn">View Menu</button>
+        </article>
+
+        <!-- Restaurant 3 -->
+        <article class="restaurant-card" data-name="Sindhi sweets" data-cuisine="Japanese, Sushi">
+          <img src="https://b.zmtcdn.com/data/dish_photos/1ac/1de6f639dd25cb6372a28a170fc261ac.jpg" alt="Restaurant 3" />
+          <div class="rest-info">
+            <h3>Sindhi Sweets</h3>
+            <p class="cuisines">Bakery,Restaurant</p>
+            <div class="details">
+              <span>30–35 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.8 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.8
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Sushi Spot">View Menu</button>
+        </article>
+
+        <!-- Restaurant 4 -->
+        <article class="restaurant-card" data-name="SagarRatna" data-cuisine="Mexican, Tacos">
+          <img src="https://s3-ap-southeast-1.amazonaws.com/assets.limetray.com/assets/user_images/content_images/original/sagarratnafm%20(5).jpg" alt="Restaurant4" />
+          <div class="rest-info">
+            <h3>The Sagar Ratna</h3>
+            <p class="cuisines">Indian</p>
+            <div class="details">
+              <span>15–20 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.9 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.9
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Taco Town">View Menu</button>
+        </article>
+
+        <!-- Restaurant 5 -->
+        <article class="restaurant-card" data-name=" Kiltan Cafe" data-cuisine="Italian, Pasta">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE2jUVThrHjKgTyJWdg8vRP9fo65mNU-uZIg&s" alt="Restaurant 4" />
+          <div class="rest-info">
+            <h3>The Kiltan Cafe</h3>
+            <p class="cuisines">Italian, Pasta</p>
+            <div class="details">
+              <span>25–30 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.5 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.5
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Pasta Paradise">View Menu</button>
+        </article>
+
+        <!-- Restaurant 6 -->
+        <article class="restaurant-card" data-name="domino'z" data-cuisine="American, Chicken">
+          <img src="https://b.zmtcdn.com/data/pictures/chains/7/90237/ce0341e58cf96f163101b4dff77ed938.jpg?fit=around|960:500&crop=960:500;*,*" alt="Restaurant6" />
+          <div class="rest-info">
+            <h3>Domino'z</h3>
+            <p class="cuisines">Pizza,burgers</p>
+            <div class="details">
+              <span>20–25 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.6 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.6
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Fried Chicken Hub">View Menu</button>
+        </article>
+
+        <!-- Restaurant 7 -->
+        <article class="restaurant-card" data-name="Little Chef" data-cuisine="Chinese, Noodles">
+          <img src="https://www.tastingtable.com/img/gallery/20-chinese-foods-you-need-to-try-at-least-once/chow-mein-1682450318.jpg" alt="Restaurant7" />
+          <div class="rest-info">
+            <h3>Little Chef</h3>
+            <p class="cuisines">Chinese, Noodles, Dumplings</p>
+            <div class="details">
+              <span>30–35 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.7 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.7
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Noodle Nook">View Menu</button>
+        </article>
+
+        <!-- Restaurant 8 -->
+        <article class="restaurant-card" data-name="Tandoori Fusio" data-cuisine="Indian, Biryani">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLVMc-MfLDs7qQjQvwP7x-lCsNptLrigDvdw&s" alt="Restaurant8" />
+          <div class="rest-info">
+            <h3>Tandoori Fusion</h3>
+            <p class="cuisines">Indian, Wraps, Curries</p>
+            <div class="details">
+              <span>25–30 min</span>
+              <span class="delivery">Free delivery</span>
+            </div>
+          </div>
+          <div class="rating" aria-label="Rating 4.8 stars">
+            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
+            </svg>
+            4.8
+          </div>
+          <button class="btn-view-menu" aria-label="View menu for Biryani Bliss">View Menu</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#Main.html" aria-label="OrderMitra homepage" class="footer-logo">
+          <i class="fas fa-utensils"></i>
+          <span>OrderMitra</span>
+        </a>
+        <p class="footer-desc">Delivering happiness, one meal at a time.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer-links" aria-label="For Restaurants">
+        <h3>For Restaurants</h3>
+        <ul>
+          <li><a href="#">Partner With Us</a></li>
+          <li><a href="#">Restaurant Dashboard</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer-links" aria-label="Legal">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">&copy; 2024 OrderMitra. All rights reserved.</div>
+  </footer>
+</body>
