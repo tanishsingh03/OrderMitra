@@ -18,7 +18,7 @@ generator client {
 // -------------------------------------
 model User {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String?
   email     String   @unique
   password  String
   address   String?
@@ -33,7 +33,7 @@ model User {
 // -------------------------------------
 model Restaurant {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String?
   email     String   @unique
   password  String
   address   String
