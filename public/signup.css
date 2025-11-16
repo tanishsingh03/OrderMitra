@@ -75,3 +75,33 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+#message {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    margin: 12px 0 18px 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: none; 
+}
+
+
+#message.success {
+    display: block;
+    background: #e6ffed;
+    color: #058220;
+    border: 1px solid #8dde9a;
+    box-shadow: 0 0 6px rgba(5,130,32,0.1);
+}
+
+
+#message.error {
+    display: block;
+    background: #ffe8e8;
+    color: #c70000;
+    border: 1px solid #f5a3a3;
+    box-shadow: 0 0 6px rgba(199,0,0,0.1);
+}
+

@@ -73,3 +73,25 @@ a {
 a:hover {
     text-decoration: underline;
 }
+#message {
+    margin-top: 5px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    min-height: 0px;
+}
+
+
+#message.error {
+    color: #c0392b;
+    background: #fbeaea;
+    border: 1px solid #f5b7b1;
+}
+
+#message.success {
+    color: #1e8449;
+    background: #e8f8f5;
+    border: 1px solid #a3e4d7;
+}

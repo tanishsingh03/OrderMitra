@@ -21,9 +21,8 @@ async function addUser(email, password, role, URL) {
 const form = document.querySelector("#signup-form");
 
 // Create message div dynamically (since your HTML doesn't have it)
-const messageDiv = document.createElement("div");
-messageDiv.id = "message";
-form.after(messageDiv);
+const messageDiv = document.getElementById("message");
+
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();

@@ -19,11 +19,7 @@ async function loginUser(email, password, URL) {
 
 const form = document.querySelector("#login-form");
 let messageDiv = document.querySelector("#message");
-if (!messageDiv) {
-    messageDiv = document.createElement("div");
-    messageDiv.id = "message";
-    document.body.appendChild(messageDiv);
-}
+
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
