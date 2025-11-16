@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Dashboard | OrderNow Feast</title>
+    <link rel="stylesheet" href="RestaurantDashboard.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <h2>Restaurant Dashboard</h2>
+        <button id="logoutBtn">Logout</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- Restaurant Info -->
+        <section class="card">
+            <h3>Your Restaurant</h3>
+            <p id="restName">Loading...</p>
+            <p id="restEmail"></p>
+            <p id="restAddress"></p>
+            <button onclick="window.location.href='RestaurantProfile.html'" class="btn">Edit Profile</button>
+        </section>
+
+        <!-- Menu Management -->
+        <section class="card">
+            <h3>Manage Menu</h3>
+
+            <div class="add-menu">
+                <input type="text" id="menuName" placeholder="Dish name">
+                <input type="number" id="menuPrice" placeholder="Price">
+                <button class="btn" onclick="addMenuItem()">Add Item</button>
+            </div>
+
+            <h4>Menu Items</h4>
+            <ul id="menuList" class="list"></ul>
+        </section>
+
+        <!-- Orders Section -->
+        <section class="card">
+            <h3>Orders</h3>
+            <ul id="ordersList" class="list"></ul>
+        </section>
+
+    </div>
+
+    <script src="RestaurantDashboard.js"></script>
+</body>
+</html>

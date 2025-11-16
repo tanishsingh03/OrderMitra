@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #fef7ef;
+    margin: 0;
+}
+
+.navbar {
+    background: #2e1f47;
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar button {
+    background: #ff6f1e;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.add-menu input {
+    padding: 10px;
+    margin-right: 10px;
+    width: 150px;
+}
+
+.btn {
+    background: #ff6f1e;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.list li {
+    background: #f7f7f7;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+}
