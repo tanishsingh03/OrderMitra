@@ -27,12 +27,16 @@
         <!-- Menu Management -->
         <section class="card">
             <h3>Manage Menu</h3>
+<div class="add-menu">
+    <input type="text" id="menuName" placeholder="Dish name">
+    <input type="number" id="menuPrice" placeholder="Price">
 
-            <div class="add-menu">
-                <input type="text" id="menuName" placeholder="Dish name">
-                <input type="number" id="menuPrice" placeholder="Price">
-                <button class="btn" onclick="addMenuItem()">Add Item</button>
-            </div>
+    <!-- NEW IMAGE UPLOAD FIELD -->
+    <input type="file" id="menuImage" accept="image/*">
+
+    <button class="btn" onclick="addMenuItem()">Add Item</button>
+</div>
+
 
             <h4>Menu Items</h4>
             <ul id="menuList" class="list"></ul>

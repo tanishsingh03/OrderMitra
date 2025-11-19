@@ -40,7 +40,7 @@ async function loadMenu() {
     list.innerHTML = "<li>Loading menu...</li>";
 
     try {
-        const res = await fetch("http://localhost:6789/api/restaurant/menu", {
+        const res = await fetch("http://localhost:6789/api/menu", {
             headers: { "Authorization": "Bearer " + token }
         });
 
@@ -71,32 +71,36 @@ async function loadMenu() {
 }
 
 // ------------------------------
-// ADD MENU ITEM
+// ADD MENU ITEM WITH IMAGE
 // ------------------------------
 async function addMenuItem() {
-    const name = document.getElementById("menuName").value;
-    const price = document.getElementById("menuPrice").value;
+    const name = document.getElementById("menuName").value.trim();
+    const price = document.getElementById("menuPrice").value.trim();
+    const image = document.getElementById("menuImage").files[0];
 
-    if (!name || !price) return alert("Please fill both fields");
+    if (!name || !price) {
+        return alert("Name and price are required!");
+    }
 
-    const res = await fetch("http://localhost:6789/api/restaurant/menu/add", {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    if (image) formData.append("image", image);
+
+    const res = await fetch("http://localhost:6789/api/menu/add", {
         method: "POST",
-        headers: {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, price })
+        headers: { "Authorization": "Bearer " + token },
+        body: formData
     });
 
-    const result = await res.json();
+    const data = await res.json();
+    console.log("Add Menu Response:", data);
 
-    if (result.success) {
-        alert("Item added!");
-        document.getElementById("menuName").value = "";
-        document.getElementById("menuPrice").value = "";
+    if (data.success) {
+        alert("Menu item added!");
         loadMenu();
     } else {
-        alert(result.message);
+        alert(data.message);
     }
 }
 
@@ -113,7 +117,8 @@ function editMenuItem(id, oldName, oldPrice) {
 }
 
 async function updateMenuItem(id, name, price) {
-    const res = await fetch(`http://localhost:6789/api/restaurant/menu/update/${id}`, {
+
+    const res = await fetch(`http://localhost:6789/api/menu/update/${id}`, {
         method: "PUT",
         headers: {
             "Authorization": "Bearer " + token,
@@ -123,6 +128,7 @@ async function updateMenuItem(id, name, price) {
     });
 
     const result = await res.json();
+
     if (result.success) {
         alert("Menu item updated!");
         loadMenu();
@@ -135,9 +141,10 @@ async function updateMenuItem(id, name, price) {
 // DELETE MENU ITEM
 // ------------------------------
 async function deleteMenuItem(id) {
+
     if (!confirm("Delete this item?")) return;
 
-    const res = await fetch(`http://localhost:6789/api/restaurant/menu/delete/${id}`, {
+    const res = await fetch(`http://localhost:6789/api/menu/delete/${id}`, {
         method: "DELETE",
         headers: { "Authorization": "Bearer " + token }
     });

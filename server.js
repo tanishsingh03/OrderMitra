@@ -33,8 +33,11 @@ app.use("/api", ordersRoutes);
 // app.use("/api", restaurantRoutes);
 app.use("/api", restaurantRoutes);
 app.use("/api/menu", restaurantMenuRoutes);
+
 app.use("/api", menuRoutes);
 app.use("/api",updateRoutes)
+app.use("/uploads", express.static("uploads"));
+
 
 
 const PORT = process.env.PORT || 6789;
