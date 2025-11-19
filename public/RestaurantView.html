@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu | OrderMitra</title>
+    <link rel="stylesheet" href="RestaurantView.css">
+</head>
+<body>
+
+<header class="header">
+    <h2 id="restName">Loading...</h2>
+    <button onclick="history.back()" class="back-btn">← Back</button>
+</header>
+
+<div class="container">
+
+    <h3>Menu Items</h3>
+    <div id="menuList" class="menu-grid">
+        <!-- Menu items will load here -->
+    </div>
+
+    <div class="order-box">
+        <h3>Your Order</h3>
+        <ul id="cartList"></ul>
+        <h4>Total: ₹<span id="totalPrice">0</span></h4>
+        <button onclick="placeOrder()" class="place-order-btn">Place Order</button>
+    </div>
+
+</div>
+
+<script src="RestaurantView.js"></script>
+</body>
+</html>

@@ -34,6 +34,10 @@
       </div>
     </div>
   </header>
+  <div id="restaurantList"></div>
+
+
+
 
   <main>
     <!-- Hero with Search -->
@@ -47,175 +51,18 @@
         </div>
       </div>
     </section>
+    <div class="restaurant-grid" id="restaurantGrid"></div>
+
 
     <!-- All Restaurants -->
     <section id="restaurants" class="container all-restaurants" aria-labelledby="restaurantsTitle">
       <h2 id="restaurantsTitle">All Restaurants</h2>
       <p>Browse and order from our full list of partnered restaurants.</p>
-      <div class="restaurant-grid" id="restaurantGrid">
-        <!-- Restaurant 1 -->
-        <article class="restaurant-card" data-name="Urban Foodies" data-cuisine="Italian, Pizza">
-          <img src="https://uk.ooni.com/cdn/shop/articles/20220211142645-margherita-9920_e41233d5-dcec-461c-b07e-03245f031dfe.jpg?v=1737105431" alt="Restaurant 1" />
-          <div class="rest-info">
-            <h3>Urban Foodies</h3>
-            <p class="cuisines">Italian, Pizza, Pasta</p>
-            <div class="details">
-              <span>25–30 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.6 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.6
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Pizza Palace">View Menu</button>
-        </article>
-
-        <!-- Restaurant 2 -->
-        <article class="restaurant-card" data-name="Raunak" data-cuisine="American, Burgers">
-         
- <img src="https://lentillovingfamily.com/wp-content/uploads/2025/08/paneer-tikka-2.jpg" alt="Restaurant 2" />
-          <div class="rest-info">
-            <h3>Hotel Raunak</h3>
-            <p class="cuisines">Indian, Burgers, Fries</p>
-            <div class="details">
-              <span>20–25 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.7 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.7
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Burger Barn">View Menu</button>
-        </article>
-
-        <!-- Restaurant 3 -->
-        <article class="restaurant-card" data-name="Sindhi sweets" data-cuisine="Japanese, Sushi">
-          <img src="https://b.zmtcdn.com/data/dish_photos/1ac/1de6f639dd25cb6372a28a170fc261ac.jpg" alt="Restaurant 3" />
-          <div class="rest-info">
-            <h3>Sindhi Sweets</h3>
-            <p class="cuisines">Bakery,Restaurant</p>
-            <div class="details">
-              <span>30–35 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.8 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.8
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Sushi Spot">View Menu</button>
-        </article>
-
-        <!-- Restaurant 4 -->
-        <article class="restaurant-card" data-name="SagarRatna" data-cuisine="Mexican, Tacos">
-          <img src="https://s3-ap-southeast-1.amazonaws.com/assets.limetray.com/assets/user_images/content_images/original/sagarratnafm%20(5).jpg" alt="Restaurant4" />
-          <div class="rest-info">
-            <h3>The Sagar Ratna</h3>
-            <p class="cuisines">Indian</p>
-            <div class="details">
-              <span>15–20 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.9 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.9
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Taco Town">View Menu</button>
-        </article>
-
-        <!-- Restaurant 5 -->
-        <article class="restaurant-card" data-name=" Kiltan Cafe" data-cuisine="Italian, Pasta">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE2jUVThrHjKgTyJWdg8vRP9fo65mNU-uZIg&s" alt="Restaurant 4" />
-          <div class="rest-info">
-            <h3>The Kiltan Cafe</h3>
-            <p class="cuisines">Italian, Pasta</p>
-            <div class="details">
-              <span>25–30 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.5 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.5
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Pasta Paradise">View Menu</button>
-        </article>
-
-        <!-- Restaurant 6 -->
-        <article class="restaurant-card" data-name="domino'z" data-cuisine="American, Chicken">
-          <img src="https://b.zmtcdn.com/data/pictures/chains/7/90237/ce0341e58cf96f163101b4dff77ed938.jpg?fit=around|960:500&crop=960:500;*,*" alt="Restaurant6" />
-          <div class="rest-info">
-            <h3>Domino'z</h3>
-            <p class="cuisines">Pizza,burgers</p>
-            <div class="details">
-              <span>20–25 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.6 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.6
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Fried Chicken Hub">View Menu</button>
-        </article>
-
-        <!-- Restaurant 7 -->
-        <article class="restaurant-card" data-name="Little Chef" data-cuisine="Chinese, Noodles">
-          <img src="https://www.tastingtable.com/img/gallery/20-chinese-foods-you-need-to-try-at-least-once/chow-mein-1682450318.jpg" alt="Restaurant7" />
-          <div class="rest-info">
-            <h3>Little Chef</h3>
-            <p class="cuisines">Chinese, Noodles, Dumplings</p>
-            <div class="details">
-              <span>30–35 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.7 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.7
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Noodle Nook">View Menu</button>
-        </article>
-
-        <!-- Restaurant 8 -->
-        <article class="restaurant-card" data-name="Tandoori Fusio" data-cuisine="Indian, Biryani">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLVMc-MfLDs7qQjQvwP7x-lCsNptLrigDvdw&s" alt="Restaurant8" />
-          <div class="rest-info">
-            <h3>Tandoori Fusion</h3>
-            <p class="cuisines">Indian, Wraps, Curries</p>
-            <div class="details">
-              <span>25–30 min</span>
-              <span class="delivery">Free delivery</span>
-            </div>
-          </div>
-          <div class="rating" aria-label="Rating 4.8 stars">
-            <svg viewBox="0 0 24 24" fill="#ff6f1e" width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.7 4.02 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>
-            </svg>
-            4.8
-          </div>
-          <button class="btn-view-menu" aria-label="View menu for Biryani Bliss">View Menu</button>
-        </article>
-      </div>
+     
     </section>
   </main>
+  <article class="restaurant-card" data-id="1">
+
 
   <footer role="contentinfo" class="footer">
     <div class="container footer-container">
@@ -257,4 +104,6 @@
 
     <div class="footer-bottom">&copy; 2024 OrderMitra. All rights reserved.</div>
   </footer>
+  <script src="CustomerDashboard.js"></script>
+
 </body>

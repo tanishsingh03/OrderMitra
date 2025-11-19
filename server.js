@@ -38,6 +38,22 @@ app.use("/api", menuRoutes);
 app.use("/api",updateRoutes)
 app.use("/uploads", express.static("uploads"));
 
+//app.use("/api", require("./Routes/customer.restaurants.routes"));
+//app.use("/api", require("./Routes/customer.restaurant.menu.routes"));
+
+const customerRestaurantsRoutes = require("./Routes/customer.restaurants.routes");
+
+app.use("/api", customerRestaurantsRoutes);
+const customerRestaurantMenuRoutes = require("./Routes/customer.restaurant.menu.routes");
+
+app.use("/api", customerRestaurantMenuRoutes);
+
+
+const publicRestaurantRoutes = require("./Routes/public.restaurant.routes");
+const publicOrderRoutes = require("./Routes/public.order.routes");
+
+app.use("/api", publicRestaurantRoutes);
+app.use("/api", publicOrderRoutes);
 
 
 const PORT = process.env.PORT || 6789;
