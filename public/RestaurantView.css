@@ -1,0 +1,157 @@
+/* ---------- GENERAL ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    background: #fafafa;
+    padding-bottom: 40px;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+    background: #ff6f1e;
+    padding: 18px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    font-size: 22px;
+}
+
+.back-btn {
+    background: white;
+    color: #ff6f1e;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #ffe2d1;
+}
+
+/* ---------- CONTAINER ---------- */
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* ---------- MENU GRID ---------- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+/* ---------- MENU CARD / TILE ---------- */
+.menu-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+}
+
+.menu-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.menu-card p {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+/* Add button */
+.add-btn {
+    background: #ff6f1e;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.add-btn:hover {
+    background: #e25b13;
+}
+
+/* ---------- ORDER BOX ---------- */
+.order-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.order-box h3 {
+    margin-bottom: 10px;
+}
+
+#cartList {
+    list-style: none;
+    margin-bottom: 15px;
+    padding-left: 0;
+}
+
+#cartList li {
+    background: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* qty buttons */
+#cartList button {
+    background: #ff6f1e;
+    color: white;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#cartList button:hover {
+    background: #e25b13;
+}
+
+/* ---------- PLACE ORDER BUTTON ---------- */
+.place-order-btn {
+    width: 100%;
+    background: green;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 700;
+}
+
+.place-order-btn:hover {
+    background: #0a850a;
+}

@@ -56,6 +56,10 @@ app.use("/api", publicRestaurantRoutes);
 app.use("/api", publicOrderRoutes);
 
 
+
+
+
+
 const PORT = process.env.PORT || 6789;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 

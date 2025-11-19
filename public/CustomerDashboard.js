@@ -22,6 +22,7 @@ async function loadRestaurants() {
     data.restaurants.forEach(r => {
       const card = document.createElement("article");
       card.className = "restaurant-card";
+      card.dataset.id = r.id; // VERY IMPORTANT
 
       card.innerHTML = `
         <img src="${r.image || 'https://via.placeholder.com/300x180?text=Restaurant'}" alt="${r.name}" />
@@ -37,10 +38,6 @@ async function loadRestaurants() {
         <button class="btn-view-menu">View Menu</button>
       `;
 
-      card.querySelector(".btn-view-menu").addEventListener("click", () =>
-        openRestaurant(r.id)
-      );
-
       grid.appendChild(card);
     });
 
@@ -50,17 +47,15 @@ async function loadRestaurants() {
   }
 }
 
-function openRestaurant(id) {
-  window.location.href = `RestaurantView.html?rid=${id}`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadRestaurants();
-});
+// Handle clicks on "View Menu"
 document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("btn-view-menu")) {
-        const card = e.target.closest(".restaurant-card");
-        const restaurantId = card.dataset.id; // will add this
-        window.location.href = `RestaurantMenu.html?restaurantId=${restaurantId}`;
-    }
+  if (e.target.classList.contains("btn-view-menu")) {
+      const card = e.target.closest(".restaurant-card");
+      const restaurantId = card.dataset.id;
+
+      // Correct customer menu page
+      window.location.href = `RestaurantView.html?rid=${restaurantId}`;
+  }
 });
+
+document.addEventListener("DOMContentLoaded", loadRestaurants);

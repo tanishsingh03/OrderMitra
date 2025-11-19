@@ -1,104 +1,174 @@
+// public/RestaurantView.js
+
 const params = new URLSearchParams(window.location.search);
 const restaurantId = params.get("rid");
 
 let cart = [];
 
-// Load restaurant data
+const token = localStorage.getItem("token");
+
 async function loadRestaurant() {
+  try {
     const res = await fetch(`http://localhost:6789/api/restaurants/${restaurantId}`);
     const data = await res.json();
+    console.log("Restaurant:", data);
 
-    if (data.success) {
-        document.getElementById("restName").innerText = data.restaurant.name;
+    if (!data.success) {
+      alert(data.message || "Failed to load restaurant");
+      return;
     }
+
+    const r = data.restaurant;
+    document.getElementById("restName").innerText = r.name || "Restaurant";
+    document.getElementById("restAddress").innerText = r.address || "";
+  } catch (err) {
+    console.error("loadRestaurant error:", err);
+    alert("Error loading restaurant");
+  }
 }
 
-// Load menu
 async function loadMenu() {
+  try {
     const res = await fetch(`http://localhost:6789/api/menu/${restaurantId}`);
     const data = await res.json();
+    console.log("Menu:", data);
 
     const container = document.getElementById("menuList");
     container.innerHTML = "";
 
+    if (!data.success) {
+      container.innerHTML = "<p>Failed to load menu</p>";
+      return;
+    }
+
+    if (!data.menu || data.menu.length === 0) {
+      container.innerHTML = "<p>No menu items yet.</p>";
+      return;
+    }
+
     data.menu.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "menu-card";
+      const card = document.createElement("div");
+      card.className = "menu-card";
 
-        div.innerHTML = `
-            <img src="${item.image ? '/uploads/' + item.image : 'https://via.placeholder.com/150'}">
-            <h4>${item.name}</h4>
-            <p>₹${item.price}</p>
-            <button class="add-btn">Add</button>
-        `;
+      card.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>₹${item.price}</p>
+        <button class="add-btn">Add</button>
+      `;
 
-        div.querySelector(".add-btn").addEventListener("click", () => addToCart(item));
-        container.appendChild(div);
+      card.querySelector(".add-btn").addEventListener("click", () => addToCart(item));
+      container.appendChild(card);
     });
+
+  } catch (err) {
+    console.error("loadMenu error:", err);
+    document.getElementById("menuList").innerHTML = "<p>Error loading menu</p>";
+  }
 }
 
-// Add item to cart
 function addToCart(item) {
-    cart.push(item);
-    renderCart();
-}
-
-// Render cart
-function renderCart() {
-    const list = document.getElementById("cartList");
-    list.innerHTML = "";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        total += item.price;
-
-        const li = document.createElement("li");
-        li.innerHTML = `
-            ${item.name} - ₹${item.price}
-            <button onclick="removeItem(${index})">X</button>
-        `;
-        list.appendChild(li);
+  const existing = cart.find(ci => ci.id === item.id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: 1,
+      restaurantId: Number(restaurantId),
     });
-
-    document.getElementById("totalPrice").innerText = total;
+  }
+  renderCart();
 }
 
-// Remove item
-function removeItem(index) {
+function renderCart() {
+  const list = document.getElementById("cartList");
+  list.innerHTML = "";
+
+  if (cart.length === 0) {
+    list.innerHTML = "<li>Cart is empty</li>";
+    document.getElementById("totalPrice").innerText = "0";
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price * item.qty;
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${item.name} - ₹${item.price} x ${item.qty}
+      <button onclick="changeQty(${index}, -1)">-</button>
+      <button onclick="changeQty(${index}, 1)">+</button>
+    `;
+    list.appendChild(li);
+  });
+
+  document.getElementById("totalPrice").innerText = total;
+}
+
+window.changeQty = function (index, delta) {
+  cart[index].qty += delta;
+  if (cart[index].qty <= 0) {
     cart.splice(index, 1);
-    renderCart();
-}
+  }
+  renderCart();
+};
 
-// Place order
 async function placeOrder() {
-    if (cart.length === 0) return alert("Cart empty!");
+  if (!token) {
+    alert("Please login as customer first");
+    window.location.href = "login.html";
+    return;
+  }
 
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Please login as customer.");
+  if (cart.length === 0) {
+    alert("Cart is empty");
+    return;
+  }
 
+  const restaurantIdNum = Number(restaurantId);
+
+  const payload = {
+    restaurantId: restaurantIdNum,
+    items: cart.map(c => ({
+      id: c.id,
+      qty: c.qty,
+    })),
+  };
+
+  try {
     const res = await fetch("http://localhost:6789/api/orders/place", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify({
-            restaurantId,
-            items: cart.map(i => ({ id: i.id, price: i.price }))
-        })
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json();
+    console.log("Place order:", data);
+
     if (data.success) {
-        alert("Order placed successfully!");
-        cart = [];
-        renderCart();
+      alert("Order placed! Order #" + data.orderNumber);
+      cart = [];
+      renderCart();
+      // later: redirect to MyOrders page
     } else {
-        alert(data.message);
+      alert(data.message || "Failed to place order");
     }
+  } catch (err) {
+    console.error("placeOrder error:", err);
+    alert("Error placing order");
+  }
 }
 
-// Load page
-loadRestaurant();
-loadMenu();
+document.addEventListener("DOMContentLoaded", () => {
+  loadRestaurant();
+  loadMenu();
+  renderCart();
+  //document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
+});
