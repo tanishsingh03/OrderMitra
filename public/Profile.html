@@ -1,11 +1,56 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Update Profile | OrderNow Feast</title>
+  <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="Profile.css" />
+  <style>
+    .addresses-section {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+
+    .address-card {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .address-info {
+      flex: 1;
+    }
+
+    .address-actions button {
+      margin-left: 5px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .add-address-form {
+      background: white;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .add-address-form.active {
+      display: block;
+    }
+  </style>
 </head>
+
 <body>
 
   <div class="container" role="main" aria-labelledby="formTitle">
@@ -24,25 +69,55 @@
       </div>
 
       <div>
-        <label for="password">Password<span style="color:#ff6f1e">*</span></label>
-        <input type="password" id="password" placeholder="Enter new password" required />
+        <label for="password">New Password (optional)</label>
+        <input type="password" id="password" placeholder="Leave blank to keep current" />
       </div>
 
       <div>
-        <label for="address">Address</label>
-        <input type="text" id="address" placeholder="Your delivery address" />
-      </div>
-
-      <div>
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="1234567890" minlength="10" maxlength="10" />
+        <label for="phone">Phone Number<span style="color:#ff6f1e">*</span></label>
+        <input type="tel" id="phone" placeholder="1234567890" minlength="10" maxlength="10" required />
       </div>
 
       <button type="submit" id="btn">Update Profile</button>
 
     </form>
+
+    <!-- Address Management Section -->
+    <div class="addresses-section">
+      <h2>Delivery Addresses <span style="color:#ff6f1e">*Required for ordering</span></h2>
+      <div id="addressesList"></div>
+
+      <button type="button" id="addAddressBtn" style="margin-top:15px">+ Add New Address</button>
+
+      <div id="addAddressForm" class="add-address-form">
+        <h3>Add New Address</h3>
+        <div>
+          <label for="newAddressLabel">Label (e.g., Home, Work)</label>
+          <input type="text" id="newAddressLabel" placeholder="Home" />
+        </div>
+        <div>
+          <label for="newAddressStreet">Street Address<span style="color:#ff6f1e">*</span></label>
+          <input type="text" id="newAddressStreet" placeholder="123 Main St, Apt 4" required />
+        </div>
+        <div>
+          <label for="newAddressCity">City<span style="color:#ff6f1e">*</span></label>
+          <input type="text" id="newAddressCity" placeholder="Mumbai" required />
+        </div>
+        <div>
+          <label for="newAddressState">State<span style="color:#ff6f1e">*</span></label>
+          <input type="text" id="newAddressState" placeholder="Maharashtra" required />
+        </div>
+        <div>
+          <label for="newAddressZip">ZIP Code<span style="color:#ff6f1e">*</span></label>
+          <input type="text" id="newAddressZip" placeholder="400001" required />
+        </div>
+        <button type="button" id="saveAddressBtn">Save Address</button>
+        <button type="button" id="cancelAddressBtn" style="background:#6c757d;">Cancel</button>
+      </div>
+    </div>
   </div>
 
   <script src="Profile.js"></script>
 </body>
+
 </html>

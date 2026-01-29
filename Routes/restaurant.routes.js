@@ -71,7 +71,8 @@ const {
     getRestaurantProfile,
     updateRestaurant,
     addMenuItem,
-    getRestaurantOrders
+    getRestaurantOrders,
+    updateOrderStatus
 } = require("../Controller/restaurant.controller");
 
 // PROFILE
@@ -83,5 +84,6 @@ router.post("/restaurant/menu/add", authenticate, upload.single("image"), addMen
 
 // ORDERS
 router.get("/restaurant/orders", authenticate, getRestaurantOrders);
+router.put("/restaurant/orders/:orderId/status", authenticate, updateOrderStatus);
 
 module.exports = router;

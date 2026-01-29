@@ -1,22 +1,27 @@
+/* Import Design System */
+@import url('design-system.css');
+
 /* Reset and base */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family);
   margin: 0;
-  background: #fff8f2;
-  color: #0B1420;
-  line-height: 1.5;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .container {
-  max-width: 1080px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--spacing-lg);
 }
 
 /* Header */
@@ -222,20 +227,22 @@ body {
   gap: 24px;
 }
 .restaurant-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgb(48 50 58 / 0.07);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   position: relative;
   outline-offset: 4px;
-  transition: box-shadow 0.3s ease;
+  transition: var(--transition-all);
 }
+
 .restaurant-card:hover,
 .restaurant-card:focus-visible {
-  box-shadow: 0 8px 40px rgb(255 111 30 / 0.3);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
   outline: none;
 }
 .restaurant-card img {
@@ -283,20 +290,23 @@ body {
   pointer-events: none;
 }
 .btn-view-menu {
-  background: linear-gradient(90deg, #ff6f1e, #ff9a44);
+  background: var(--primary-gradient);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 12px 0;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   color: white;
   cursor: pointer;
   margin: 0 20px 20px;
-  box-shadow: 0 6px 20px rgb(255 111 30 / 0.36);
-  transition: background 0.3s ease;
+  box-shadow: var(--shadow-primary);
+  transition: var(--transition-all);
 }
+
 .btn-view-menu:hover,
 .btn-view-menu:focus-visible {
-  background: linear-gradient(90deg, #ff7d3a, #ffb061);
+  background: var(--primary-gradient-hover);
+  box-shadow: var(--shadow-primary-hover);
+  transform: translateY(-2px);
   outline: none;
 }
 

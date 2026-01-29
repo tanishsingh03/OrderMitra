@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Dashboard - OrderMitra</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="DeliveryDashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>🚴 Delivery Dashboard</h1>
+                <div class="header-actions">
+                    <span id="partnerName" class="partner-name"></span>
+                    <button id="logoutBtn" class="btn-logout">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Status Toggle -->
+        <div class="status-section">
+            <div class="status-card">
+                <h3>Availability Status</h3>
+                <div class="status-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="onlineToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span id="statusText">Offline</span>
+                </div>
+                <p id="statusMessage" class="status-message">Go online to receive delivery requests</p>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-info">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Total Deliveries</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <h3 id="totalEarnings">₹0</h3>
+                    <p>Total Earnings</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-info">
+                    <h3 id="rating">0.0</h3>
+                    <p>Rating</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💵</div>
+                <div class="stat-info">
+                    <h3 id="walletBalance">₹0</h3>
+                    <p>Wallet Balance</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="available">Available Orders</button>
+            <button class="tab-btn" data-tab="active">Active Orders</button>
+            <button class="tab-btn" data-tab="history">Delivery History</button>
+            <button class="tab-btn" data-tab="earnings">Earnings</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Available Orders Tab -->
+            <div id="availableTab" class="tab-pane active">
+                <h2>Available Orders</h2>
+                <div id="availableOrdersList" class="orders-list">
+                    <p class="empty-state">No available orders at the moment</p>
+                </div>
+            </div>
+
+            <!-- Active Orders Tab -->
+            <div id="activeTab" class="tab-pane">
+                <h2>Active Deliveries</h2>
+                <div id="activeOrdersList" class="orders-list">
+                    <p class="empty-state">No active deliveries</p>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="historyTab" class="tab-pane">
+                <h2>Delivery History</h2>
+                <div id="historyOrdersList" class="orders-list">
+                    <p class="empty-state">No delivery history</p>
+                </div>
+            </div>
+
+            <!-- Earnings Tab -->
+            <div id="earningsTab" class="tab-pane">
+                <h2>Earnings</h2>
+                <div class="earnings-summary">
+                    <div class="earnings-card">
+                        <h3>Total Earnings</h3>
+                        <p class="earnings-amount" id="totalEarningsAmount">₹0</p>
+                    </div>
+                    <div class="earnings-card">
+                        <h3>Wallet Balance</h3>
+                        <p class="earnings-amount" id="walletBalanceAmount">₹0</p>
+                    </div>
+                    <div class="earnings-card">
+                        <h3>Total Deliveries</h3>
+                        <p class="earnings-amount" id="totalDeliveriesCount">0</p>
+                    </div>
+                </div>
+                <div id="earningsBreakdown"></div>
+                <h3 style="margin-top: 30px;">Recent Earnings</h3>
+                <div id="earningsList" class="earnings-list">
+                    <p class="empty-state">No earnings data</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Details</h2>
+            <div id="orderDetails"></div>
+            <div class="modal-actions">
+                <button id="acceptOrderBtn" class="btn-primary">Accept Order</button>
+                <button id="updateStatusBtn" class="btn-secondary" style="display: none;">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="DeliveryDashboard.js"></script>
+</body>
+</html>
+

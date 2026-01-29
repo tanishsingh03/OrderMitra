@@ -7,8 +7,9 @@ const router = express.Router();
 const {
     signup,
     login,
-    updateCustomer,
-    getCustomerProfile
+    forgotPassword,
+    resetPassword,
+    changePassword
 } = require("../Controller/auth.controller");
 
 const { authenticate } = require("../Middleware/auth.middleware");
@@ -17,6 +18,9 @@ const { authenticate } = require("../Middleware/auth.middleware");
 // AUTH ROUTES
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
+router.post("/change-password", authenticate, changePassword);
 
 
 // CUSTOMER PROFILE ROUTES

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Dashboard | OrderNow Feast</title>
+    <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="RestaurantDashboard.css">
 </head>
 <body>
@@ -21,7 +22,13 @@
             <p id="restName">Loading...</p>
             <p id="restEmail"></p>
             <p id="restAddress"></p>
+            <div id="restRating"></div>
             <button onclick="window.location.href='RestaurantProfile.html'" class="btn">Edit Profile</button>
+        </section>
+
+        <!-- Rating Stats -->
+        <section class="card" id="ratingStats" style="display: none;">
+            <!-- Rating stats will be loaded here -->
         </section>
 
         <!-- Menu Management -->
@@ -50,6 +57,7 @@
 
     </div>
 
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="RestaurantDashboard.js"></script>
 </body>
 </html>

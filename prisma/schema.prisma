@@ -11,63 +11,132 @@ generator client {
 // Users Table (Customers)
 // -------------------------------------
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  address   String?
-  phone     String?
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String?
+  email         String         @unique
+  password      String
+  phone         String?
+  image         String?
+  isVerified    Boolean        @default(false)
+  resetToken    String?
+  resetExpires  DateTime?
+  addresses     Address[]
+  orders        Order[]
+  ratings       Rating[]
+  wallet        Wallet?
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 // -------------------------------------
 // Restaurants Table
 // -------------------------------------
 model Restaurant {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  address   String
-  phone     String?
-  image     String?         // ⭐ NEW — Restaurant photo/logo
-  menu      MenuItem[]
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String?
+  email         String         @unique
+  password      String
+  address       String
+  phone         String?
+  image         String?
+  description   String?
+  cuisine       String?
+  rating        Float          @default(0)
+  totalRatings  Int            @default(0)
+  isVerified    Boolean        @default(false)
+  isActive      Boolean        @default(true)
+  resetToken    String?
+  resetExpires  DateTime?
+  latitude      Float?
+  longitude     Float?
+  prepTime      Int            @default(30) // minutes
+  commission    Float          @default(0.15) // 15% commission
+  menu          MenuItem[]
+  orders        Order[]
+  ratings       Rating[]
+  wallet        Wallet?
+  coupons       Coupon[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 // -------------------------------------
 // Menu Items
 // -------------------------------------
 model MenuItem {
-  id            Int       @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   name          String
+  description   String?
   price         Float
-  image         String?       // ⭐ NEW — Food picture
+  image         String?
+  category      String?
+  isAvailable   Boolean     @default(true)
   restaurantId  Int
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant    Restaurant  @relation(fields: [restaurantId], references: [id])
   orderItems    OrderItem[]
+  ratings       Rating[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
 }
 
 // -------------------------------------
 // Orders
 // -------------------------------------
-model Order {
-  id           Int       @id @default(autoincrement())
-  orderNumber  String    @unique
-  userId       Int
-  restaurantId Int
-  totalPrice   Float
-  status       String    @default("PENDING")
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  READY_FOR_PICKUP
+  ASSIGNED
+  AT_RESTAURANT
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
 
-  user         User       @relation(fields: [userId], references: [id])
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  items        OrderItem[]
+enum PaymentMethod {
+  COD
+  UPI
+  CARD
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id              Int            @id @default(autoincrement())
+  orderNumber     String         @unique
+  userId          Int
+  restaurantId    Int
+  deliveryPartnerId Int?
+  addressId       Int?
+  totalPrice      Float
+  subtotal        Float          @default(0)
+  deliveryFee     Float          @default(0)
+  discount        Float          @default(0)
+  tax             Float          @default(0)
+  status          OrderStatus    @default(PLACED)
+  paymentMethod   PaymentMethod  @default(COD)
+  paymentStatus   PaymentStatus  @default(PENDING)
+  scheduledFor    DateTime?
+  estimatedTime   Int?           // minutes
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
+  cancellationReason String?
+  user            User           @relation(fields: [userId], references: [id])
+  restaurant      Restaurant     @relation(fields: [restaurantId], references: [id])
+  deliveryPartner DeliveryPartner? @relation(fields: [deliveryPartnerId], references: [id])
+  address         Address?       @relation(fields: [addressId], references: [id])
+  items           OrderItem[]
+  payment         Payment?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 }
 
 // -------------------------------------
@@ -78,7 +147,172 @@ model OrderItem {
   orderId    Int
   menuItemId Int
   quantity   Int
+  price      Float    @default(0) // Price at time of order
+  notes      String?
 
-  order      Order    @relation(fields: [orderId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+// -------------------------------------
+// Addresses (Multiple addresses per user)
+// -------------------------------------
+model Address {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  label       String   // Home, Work, etc.
+  street      String
+  city        String
+  state       String
+  zipCode     String
+  latitude    Float?
+  longitude   Float?
+  isDefault   Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// -------------------------------------
+// Delivery Partners
+// -------------------------------------
+model DeliveryPartner {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  phone         String
+  vehicleType   String?        // Bike, Car, etc.
+  vehicleNumber String?
+  licenseNumber String?
+  isOnline      Boolean        @default(false)
+  isAvailable   Boolean        @default(true)
+  latitude      Float?
+  longitude     Float?
+  rating        Float          @default(0)
+  totalRatings  Int            @default(0)
+  isVerified    Boolean        @default(false)
+  orders        Order[]
+  wallet        Wallet?
+  ratings       Rating[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// -------------------------------------
+// Admin Users
+// -------------------------------------
+model Admin {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin") // admin, super_admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -------------------------------------
+// Wallets
+// -------------------------------------
+model Wallet {
+  id                Int            @id @default(autoincrement())
+  userId            Int?           @unique
+  restaurantId      Int?           @unique
+  deliveryPartnerId Int?           @unique
+  balance           Float          @default(0)
+  user              User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant        Restaurant?    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  deliveryPartner   DeliveryPartner? @relation(fields: [deliveryPartnerId], references: [id], onDelete: Cascade)
+  transactions      WalletTransaction[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+// -------------------------------------
+// Wallet Transactions
+// -------------------------------------
+model WalletTransaction {
+  id          Int       @id @default(autoincrement())
+  walletId    Int
+  amount      Float
+  type        String    // credit, debit
+  description String
+  orderId     Int?
+  wallet      Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+// -------------------------------------
+// Payments
+// -------------------------------------
+model Payment {
+  id            Int            @id @default(autoincrement())
+  orderId       Int            @unique
+  amount        Float
+  method        PaymentMethod
+  status        PaymentStatus
+  transactionId String?
+  paymentGateway String?      // razorpay, stripe, etc.
+  order         Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// -------------------------------------
+// Ratings & Reviews
+// -------------------------------------
+model Rating {
+  id                Int               @id @default(autoincrement())
+  userId            Int
+  restaurantId      Int?
+  deliveryPartnerId Int?
+  menuItemId        Int?
+  orderId           Int?
+  rating            Int               // 1-5
+  comment           String?
+  ratingType        String?           // "restaurant", "delivery", "food"
+  user              User              @relation(fields: [userId], references: [id])
+  restaurant        Restaurant?       @relation(fields: [restaurantId], references: [id])
+  deliveryPartner   DeliveryPartner?  @relation(fields: [deliveryPartnerId], references: [id])
+  menuItem          MenuItem?         @relation(fields: [menuItemId], references: [id])
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+// -------------------------------------
+// Coupons & Discounts
+// -------------------------------------
+model Coupon {
+  id            Int       @id @default(autoincrement())
+  code          String    @unique
+  restaurantId  Int?
+  discountType  String    // percentage, fixed
+  discountValue Float
+  minOrder      Float?
+  maxDiscount   Float?
+  validFrom     DateTime
+  validUntil    DateTime
+  usageLimit    Int?
+  usedCount     Int       @default(0)
+  isActive      Boolean   @default(true)
+  restaurant    Restaurant? @relation(fields: [restaurantId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// -------------------------------------
+// Notifications
+// -------------------------------------
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  type      String   // order, payment, general
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }

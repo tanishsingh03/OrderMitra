@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>All Restaurants | OrderMitra</title>
+  <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="enhanced-styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -21,9 +23,8 @@
 
       <nav aria-label="Primary menu" class="navbar">
         <ul>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how-it-works">How it Works</a></li>
-          <li><a href="#restaurants">Restaurants</a></li>
+          <li><a href="CustomerDashboard.html">Restaurants</a></li>
+          <li><a href="MyOrders.html">My Orders</a></li>
         </ul>
       </nav>
 
@@ -47,10 +48,34 @@
         <p>Find your favorite cuisines and order from hundreds of restaurants near you.</p>
         <div class="search-bar" id="search">
           <input type="text" id="searchInput" placeholder="Search by restaurant name or cuisine..." aria-label="Search restaurants" />
-          <button class="btn-search" aria-label="Search">Search</button>
+          <button class="btn-search" aria-label="Search">
+            <i class="fas fa-search"></i> Search
+          </button>
         </div>
       </div>
     </section>
+
+    <!-- Enhanced Filters -->
+    <section class="container search-filters-container">
+      <div class="search-bar-enhanced">
+        <input type="text" id="searchInputEnhanced" placeholder="Search restaurants, cuisines..." />
+        <button class="btn-primary btn-search">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </div>
+      
+      <div class="filter-buttons">
+        <span style="font-weight: 600; margin-right: 8px;">Sort by:</span>
+        <button class="filter-btn active" data-sort="rating">⭐ Rating</button>
+        <button class="filter-btn" data-sort="name">🔤 Name</button>
+        
+        <span style="font-weight: 600; margin-left: 24px; margin-right: 8px;">Rating:</span>
+        <button class="filter-btn" data-filter="rating" data-value="4">4+ ⭐</button>
+        <button class="filter-btn" data-filter="rating" data-value="3">3+ ⭐</button>
+        <button class="filter-btn" data-filter="rating">All</button>
+      </div>
+    </section>
+
     <div class="restaurant-grid" id="restaurantGrid"></div>
 
 
@@ -104,6 +129,7 @@
 
     <div class="footer-bottom">&copy; 2024 OrderMitra. All rights reserved.</div>
   </footer>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   <script src="CustomerDashboard.js"></script>
 
 </body>

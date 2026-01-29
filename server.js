@@ -15,7 +15,12 @@ const restaurantMenuRoutes = require("./Routes/restaurant.menu.routes");
 const app = express();
 
 // Middleware
-app.use(cors()); // allow cross-origin requests during dev
+app.use(cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:6789",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+})); // allow cross-origin requests with credentials
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -55,12 +60,53 @@ const publicOrderRoutes = require("./Routes/public.order.routes");
 app.use("/api", publicRestaurantRoutes);
 app.use("/api", publicOrderRoutes);
 
+// New routes
+const deliveryRoutes = require("./Routes/delivery.routes");
+const adminRoutes = require("./Routes/admin.routes");
+const addressRoutes = require("./Routes/address.routes");
+const walletRoutes = require("./Routes/wallet.routes");
+const notificationRoutes = require("./Routes/notification.routes");
+const ratingRoutes = require("./Routes/rating.routes");
+const couponRoutes = require("./Routes/coupon.routes");
+
+app.use("/api/delivery", deliveryRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/addresses", addressRoutes);
+app.use("/api/wallet", walletRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/ratings", ratingRoutes);
+app.use("/api/coupons", couponRoutes);
+
 
 
 
 
 
 const PORT = process.env.PORT || 6789;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+//app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const http = require("http");
+const { socketServer } = require("./websocket");
+const { initRedis } = require("./Utility/orderQueue");
+
+const server = http.createServer(app);
+socketServer(server);
+
+// Initialize order queue Redis connection
+initRedis();
+
+server.listen(PORT, () => console.log(`🚀 Server running with WebSockets on port ${PORT}`));
+
+// Handle port conflicts gracefully
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use.`);
+    console.error(`💡 Try: lsof -ti:${PORT} | xargs kill -9`);
+    console.error(`💡 Or use a different port by setting PORT in .env`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});
+
 
 

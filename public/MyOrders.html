@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Orders | OrderMitra</title>
+  <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="MyOrders.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+</head>
+<body>
+  <header class="header" role="banner">
+    <div class="container header-container">
+      <a href="CustomerDashboard.html" class="logo" aria-label="OrderMitra homepage">
+        <i class="fas fa-utensils"></i>
+        <span>OrderMitra</span>
+      </a>
+
+      <nav aria-label="Primary menu" class="navbar">
+        <ul>
+          <li><a href="CustomerDashboard.html">Restaurants</a></li>
+          <li><a href="MyOrders.html" class="active">My Orders</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="Profile.html"><i class="fa-solid fa-user" id="profile"></i></a>
+        <button class="btn-getstarted" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="orders-section">
+      <h1>My Orders</h1>
+      <div class="orders-container" id="ordersContainer">
+        <div class="loading">Loading orders...</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="MyOrders.js"></script>
+</body>
+</html>
+

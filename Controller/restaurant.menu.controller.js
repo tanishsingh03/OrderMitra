@@ -1,4 +1,5 @@
 const prisma = require("../Utility/prisma");
+const { publishOrderUpdate } = require("../websocket");
 
 // ------------------------------
 // GET MENU FOR LOGGED-IN RESTAURANT
@@ -41,6 +42,17 @@ exports.addMenuItem = async (req, res) => {
             }
         });
 
+        // Broadcast menu update via WebSocket
+        await publishOrderUpdate({
+            type: "MENU_UPDATED",
+            action: "ADDED",
+            restaurantId: req.user.id,
+            menuItem: item,
+            timestamp: new Date().toISOString()
+        });
+
+        console.log(`✅ Menu item added and broadcast: ${item.name}`);
+
         res.json({ success: true, item });
 
     } catch (err) {
@@ -69,6 +81,17 @@ exports.updateMenuItem = async (req, res) => {
             data: updatedData
         });
 
+        // Broadcast menu update via WebSocket
+        await publishOrderUpdate({
+            type: "MENU_UPDATED",
+            action: "UPDATED",
+            restaurantId: req.user.id,
+            menuItem: item,
+            timestamp: new Date().toISOString()
+        });
+
+        console.log(`✅ Menu item updated and broadcast: ${item.name}`);
+
         res.json({ success: true, item });
 
     } catch (err) {
@@ -83,7 +106,18 @@ exports.deleteMenuItem = async (req, res) => {
     try {
         const id = Number(req.params.id);
 
-        await prisma.menuItem.delete({ where: { id } });
+        const deletedItem = await prisma.menuItem.delete({ where: { id } });
+
+        // Broadcast menu update via WebSocket
+        await publishOrderUpdate({
+            type: "MENU_UPDATED",
+            action: "DELETED",
+            restaurantId: deletedItem.restaurantId,
+            menuItemId: id,
+            timestamp: new Date().toISOString()
+        });
+
+        console.log(`✅ Menu item deleted and broadcast: ID ${id}`);
 
         res.json({ success: true, message: "Menu item deleted" });
 

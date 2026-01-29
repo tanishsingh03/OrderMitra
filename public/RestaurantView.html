@@ -25,7 +25,30 @@
     <div class="order-box">
         <h3>Your Order</h3>
         <ul id="cartList"></ul>
-        <h4>Total: ₹<span id="totalPrice">0</span></h4>
+        
+        <div class="order-breakdown">
+            <div class="breakdown-row">
+                <span>Subtotal:</span>
+                <span>₹<span id="subtotal">0.00</span></span>
+            </div>
+            <div class="breakdown-row">
+                <span>Delivery Fee:</span>
+                <span>₹<span id="deliveryFee">0.00</span></span>
+            </div>
+            <div class="breakdown-row">
+                <span>Handling Charge:</span>
+                <span>₹<span id="handlingCharge">0.00</span></span>
+            </div>
+            <div class="breakdown-row">
+                <span>Tax (GST):</span>
+                <span>₹<span id="tax">0.00</span></span>
+            </div>
+            <div class="breakdown-row total-row">
+                <strong>Total:</strong>
+                <strong>₹<span id="totalPrice">0.00</span></strong>
+            </div>
+        </div>
+        
         <button onclick="placeOrder()" class="place-order-btn">Place Order</button>
     </div>
 

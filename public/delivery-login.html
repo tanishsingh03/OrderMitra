@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Partner Login - OrderMitra</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">
+                <h1>🚴 OrderMitra</h1>
+            </div>
+            <h2>Delivery Partner Login</h2>
+            <p class="subtitle">Welcome back! Login to start delivering.</p>
+            
+            <form id="deliveryLoginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            
+            <div class="links">
+                <p><a href="forgot-password.html">Forgot Password?</a></p>
+                <p>Don't have an account? <a href="delivery-signup.html">Sign up</a></p>
+                <p><a href="Main.html">Back to Home</a></p>
+            </div>
+            
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <script src="delivery-login.js"></script>
+</body>
+</html>
+

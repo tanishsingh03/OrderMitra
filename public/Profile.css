@@ -1,13 +1,15 @@
 
+@import url('design-system.css');
+
 .container {
-  max-width: 480px;
+  max-width: 500px;
   margin: 60px auto;
-  padding: 0 20px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 36px rgb(255 111 30 / 0.2);
-  padding: 40px 35px;
-  font-family: 'Inter', sans-serif;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-family);
+  animation: slideUp 0.4s ease;
 }
 
 h1 {
@@ -34,19 +36,20 @@ label {
 
 input {
   padding: 14px 18px;
-  border-radius: 12px;
-  border: 1.5px solid #cfd8e4;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #475467;
-  transition: border-color 0.3s;
-  width:420px;
-  font-family: 'Inter', sans-serif;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-color);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  transition: var(--transition-base);
+  width: 100%;
+  font-family: var(--font-family);
 }
+
 input:focus {
   outline: none;
-  border-color: #ff6f1e;
-  box-shadow: 0 0 8px rgb(255 111 30 / 0.4);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(255, 111, 30, 0.1);
 }
 
 /* Email is unique so disable editing */
@@ -57,22 +60,25 @@ input[readonly] {
 }
 
 button[type="submit"] {
-  margin-top: 26px;
-  background: linear-gradient(90deg, #ff6f1e, #ff9a44);
+  margin-top: var(--spacing-lg);
+  background: var(--primary-gradient);
   border: none;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
   color: white;
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
   padding: 16px 0;
   cursor: pointer;
-  box-shadow: 0 9px 28px rgb(255 111 30 / 0.45);
-  transition: background 0.3s ease;
+  box-shadow: var(--shadow-primary);
+  transition: var(--transition-all);
   width: 100%;
 }
+
 button[type="submit"]:hover,
 button[type="submit"]:focus-visible {
-  background: linear-gradient(90deg, #ff7d30, #ffb461);
+  background: var(--primary-gradient-hover);
+  box-shadow: var(--shadow-primary-hover);
+  transform: translateY(-2px);
   outline: none;
 }
 
