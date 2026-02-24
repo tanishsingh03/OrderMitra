@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install ALL dependencies (including devDeps like prisma CLI)
-RUN npm ci
+RUN npm install
 
 # Copy application files
 COPY . .
