@@ -1,7 +1,14 @@
-node_modules
-# Keep environment variables out of version control
-# .env
+node_modules/
+uploads/
 
+# Environment variables - keep secrets out of git
+.env
+.env.local
+.env.production
+
+# Keep the example file in git (no secrets in it)
+!.env.example
+
+# Prisma generated client (auto-generated during build)
 # /generated/prisma
-
 # /lib/generated/prisma

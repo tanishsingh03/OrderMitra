@@ -14,23 +14,25 @@ async function socketServer(server) {
 
     // Initialize Redis connections
     try {
-        pub = new Redis({
-            host: process.env.REDIS_HOST || "localhost",
-            port: process.env.REDIS_PORT || 6379,
-            retryStrategy: (times) => {
-                const delay = Math.min(times * 50, 2000);
-                return delay;
+        const redisConfig = process.env.REDIS_URL
+            ? {
+                // Render provides a full Redis URL
+                lazyConnect: false,
+                retryStrategy: (times) => Math.min(times * 50, 2000)
             }
-        });
+            : {
+                host: process.env.REDIS_HOST || "localhost",
+                port: parseInt(process.env.REDIS_PORT) || 6379,
+                retryStrategy: (times) => Math.min(times * 50, 2000)
+            };
 
-        sub = new Redis({
-            host: process.env.REDIS_HOST || "localhost",
-            port: process.env.REDIS_PORT || 6379,
-            retryStrategy: (times) => {
-                const delay = Math.min(times * 50, 2000);
-                return delay;
-            }
-        });
+        pub = process.env.REDIS_URL
+            ? new Redis(process.env.REDIS_URL, redisConfig)
+            : new Redis(redisConfig);
+
+        sub = process.env.REDIS_URL
+            ? new Redis(process.env.REDIS_URL, redisConfig)
+            : new Redis(redisConfig);
 
         pub.on("error", (err) => console.error("Redis Publisher Error:", err));
         sub.on("error", (err) => console.error("Redis Subscriber Error:", err));

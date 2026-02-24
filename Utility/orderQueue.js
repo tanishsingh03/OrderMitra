@@ -6,14 +6,18 @@ let redisClient = null;
 // Initialize Redis client for message queue
 function initRedis() {
     if (!redisClient) {
-        redisClient = new Redis({
-            host: process.env.REDIS_HOST || "localhost",
-            port: process.env.REDIS_PORT || 6379,
-            retryStrategy: (times) => {
-                const delay = Math.min(times * 50, 2000);
-                return delay;
-            }
-        });
+        const redisConfig = {
+            retryStrategy: (times) => Math.min(times * 50, 2000)
+        };
+
+        if (!process.env.REDIS_URL) {
+            redisConfig.host = process.env.REDIS_HOST || "localhost";
+            redisConfig.port = parseInt(process.env.REDIS_PORT) || 6379;
+        }
+
+        redisClient = process.env.REDIS_URL
+            ? new Redis(process.env.REDIS_URL, redisConfig)
+            : new Redis(redisConfig);
 
         redisClient.on("error", (err) => {
             console.error("❌ Order Queue Redis Error:", err);
@@ -33,7 +37,7 @@ function initRedis() {
 async function addOrderToQueue(orderId, orderData) {
     try {
         const client = initRedis();
-        
+
         // Add order to queue with order data
         await client.lpush("order_queue", JSON.stringify({
             orderId,
@@ -52,7 +56,7 @@ async function addOrderToQueue(orderId, orderData) {
         await client.expire(`order:${orderId}`, 1800);
 
         console.log(`📦 Order ${orderId} added to distribution queue`);
-        
+
         // Publish to channel for real-time notification
         await client.publish("new_order_available", JSON.stringify({
             orderId,
@@ -72,10 +76,10 @@ async function addOrderToQueue(orderId, orderData) {
 async function removeOrderFromQueue(orderId) {
     try {
         const client = initRedis();
-        
+
         // Get all orders from queue
         const orders = await client.lrange("order_queue", 0, -1);
-        
+
         // Filter out the accepted order
         const filteredOrders = orders.filter(orderStr => {
             const order = JSON.parse(orderStr);
@@ -120,7 +124,7 @@ async function registerDeliveryPartner(partnerId, location = null) {
     try {
         const client = initRedis();
         const key = `delivery_partner:${partnerId}`;
-        
+
         await client.hset(key, {
             partnerId,
             isOnline: true,
@@ -180,7 +184,7 @@ async function getOnlinePartners() {
 async function distributeOrderToPartners(orderId, orderData) {
     try {
         const onlinePartners = await getOnlinePartners();
-        
+
         if (onlinePartners.length === 0) {
             console.log("⚠️ No online delivery partners available");
             return false;
