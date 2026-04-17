@@ -12,3 +12,4 @@ uploads/
 # Prisma generated client (auto-generated during build)
 # /generated/prisma
 # /lib/generated/prisma
+.env
