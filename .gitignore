@@ -13,3 +13,4 @@ uploads/
 # /generated/prisma
 # /lib/generated/prisma
 .env
+.env
