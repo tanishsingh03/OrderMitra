@@ -1,0 +1,80 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Restaurant {
+  id            Int        @id @default(autoincrement())
+  name          String?
+  email         String     @unique
+  password      String
+  address       String
+  phone         String?
+  image         String?
+  description   String?
+  cuisine       String?
+  rating        Float      @default(0)
+  totalRatings  Int        @default(0)
+  isVerified    Boolean    @default(false)
+  isActive      Boolean    @default(true)
+  prepTime      Int        @default(30)
+  commission    Float      @default(0.15)
+  menu          MenuItem[]
+  coupons       Coupon[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model MenuItem {
+  id            Int        @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
+  image         String?
+  category      String?
+  isAvailable   Boolean    @default(true)
+  restaurantId  Int
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  tags          FoodTag[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now()) @updatedAt
+
+  @@index([restaurantId])
+  @@index([isAvailable])
+  @@index([price])
+  @@index([category])
+}
+
+model FoodTag {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  menuItems   MenuItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([name])
+}
+
+model Coupon {
+  id            Int         @id @default(autoincrement())
+  code          String      @unique
+  restaurantId  Int?
+  discountType  String      // percentage, fixed
+  discountValue Float
+  minOrder      Float?
+  maxDiscount   Float?
+  validFrom     DateTime
+  validUntil    DateTime
+  usageLimit    Int?
+  usedCount     Int         @default(0)
+  isActive      Boolean     @default(true)
+  restaurant    Restaurant? @relation(fields: [restaurantId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

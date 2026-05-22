@@ -10,7 +10,14 @@ router.get("/restaurant/:id", async (req, res) => {
     const restaurant = await prisma.restaurant.findUnique({
       where: { id: restaurantId },
       include: {
-        menu: true,    // because in Prisma schema Restaurant has `menu  MenuItem[]`
+        menu: {
+          include: {
+            tags: true,
+          },
+          orderBy: {
+            updatedAt: "desc",
+          },
+        },
       },
     });
 

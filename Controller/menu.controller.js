@@ -95,11 +95,17 @@ async function addMenuItem(req, res) {
 async function updateMenuItem(req, res) {
     try {
         const id = req.params.id;
-        const { name, price } = req.body;
+        const { name, price, description, category, isAvailable } = req.body;
 
         const updated = await prisma.menuItem.update({
             where: { id: Number(id) },
-            data: { name, price: Number(price) }
+            data: { 
+                name, 
+                price: Number(price),
+                description,
+                category,
+                isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : undefined
+            }
         });
 
         res.json({ success: true, updated });

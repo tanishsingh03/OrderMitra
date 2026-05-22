@@ -7,7 +7,8 @@ router.get("/restaurants", async (req, res) => {
   try {
     const { city, state } = req.query;
 
-    // Simple query - filter incomplete profiles in JavaScript instead of Prisma
+    // Show active restaurants to customers. Do not hide newly onboarded
+    // restaurants just because profile metadata like phone/cuisine is incomplete.
     const allRestaurants = await prisma.restaurant.findMany({
       where: {
         isActive: true
@@ -27,32 +28,37 @@ router.get("/restaurants", async (req, res) => {
         longitude: true,
         prepTime: true,
         isVerified: true,
+        _count: {
+          select: { menu: true }
+        }
       },
       orderBy: {
         rating: 'desc'
       }
     });
 
-    // Filter out incomplete profiles in JavaScript
-    const completeRestaurants = allRestaurants.filter(r => {
-      const hasValidName = r.name && r.name.trim() !== "" && r.name !== "New Restaurant";
-      const hasValidAddress = r.address && r.address.trim() !== "" && r.address !== "Not added";
-      const hasValidPhone = r.phone && r.phone.trim() !== "";
-
-      // Optional location filter
-      let matchesLocation = true;
-      if (city) {
-        matchesLocation = r.address && r.address.toLowerCase().includes(city.toLowerCase());
-      } else if (state) {
-        matchesLocation = r.address && r.address.toLowerCase().includes(state.toLowerCase());
-      }
-
-      return hasValidName && hasValidAddress && hasValidPhone && matchesLocation;
+    const visibleRestaurants = allRestaurants.filter((r) => {
+      const hasAnyIdentity = Boolean(
+        (r.name && r.name.trim()) ||
+        (r.address && r.address.trim()) ||
+        (r.image && r.image.trim()) ||
+        r._count.menu > 0
+      );
+      return hasAnyIdentity;
     });
 
-    console.log(`✅ Found ${completeRestaurants.length} restaurants with complete profiles (filtered from ${allRestaurants.length} total)`);
+    const locationQuery = String(city || state || "").trim().toLowerCase();
+    const restaurants = locationQuery
+      ? [...visibleRestaurants].sort((a, b) => {
+          const aMatches = (a.address || "").toLowerCase().includes(locationQuery);
+          const bMatches = (b.address || "").toLowerCase().includes(locationQuery);
+          return Number(bMatches) - Number(aMatches);
+        })
+      : visibleRestaurants;
 
-    res.json({ success: true, restaurants: completeRestaurants });
+    console.log(`✅ Found ${restaurants.length} visible restaurants (from ${allRestaurants.length} active)`);
+
+    res.json({ success: true, restaurants });
   } catch (err) {
     console.error("Error fetching restaurants:", err);
     res.status(500).json({ success: false, message: "Failed to load restaurants. Please try again." });

@@ -38,7 +38,7 @@ async function login(req, res) {
                 id: admin.id,
                 email: admin.email,
                 name: admin.name,
-                role: admin.role,
+                role: "admin",
             },
         });
     } catch (err) {
@@ -252,4 +252,3 @@ module.exports = {
     getAllDeliveryPartners,
     assignOrder,
 };
-

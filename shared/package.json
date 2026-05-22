@@ -1,0 +1,11 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Common utilities and middleware for OrderMitra microservices",
+  "main": "index.js",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "winston": "^3.11.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

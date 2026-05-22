@@ -10,26 +10,26 @@ const authRoutes = require("./Routes/auth.routes");
 const ordersRoutes = require("./Routes/orders.routes");
 const restaurantRoutes = require("./Routes/restaurant.routes");
 const menuRoutes = require("./Routes/menu.routes");
-const updateRoutes=require("./Routes/UpdateRoutes")
+const updateRoutes = require("./Routes/UpdateRoutes")
 const restaurantMenuRoutes = require("./Routes/restaurant.menu.routes");
 const app = express();
 
 // Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:6789",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+  origin: process.env.FRONTEND_URL || "http://localhost:6789",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 })); // allow cross-origin requests with credentials
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static frontend (public folder)
-app.use(express.static(__dirname+ "/public"));
+app.use(express.static(__dirname + "/public"));
 
 // Health check / root page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "Main.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // mount modular routes under /api
@@ -40,7 +40,7 @@ app.use("/api", restaurantRoutes);
 app.use("/api/menu", restaurantMenuRoutes);
 
 app.use("/api", menuRoutes);
-app.use("/api",updateRoutes)
+app.use("/api", updateRoutes)
 app.use("/uploads", express.static("uploads"));
 
 //app.use("/api", require("./Routes/customer.restaurants.routes"));
@@ -68,16 +68,42 @@ const walletRoutes = require("./Routes/wallet.routes");
 const notificationRoutes = require("./Routes/notification.routes");
 const ratingRoutes = require("./Routes/rating.routes");
 const couponRoutes = require("./Routes/coupon.routes");
+const dietaryRoutes = require("./Routes/dietary.routes");
+const analyticsRoutes = require("./Routes/analytics.routes");
+const aiRoutes = require("./Routes/ai.routes");
 
 app.use("/api/delivery", deliveryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/addresses", addressRoutes);
 app.use("/api/wallet", walletRoutes);
+app.use("/api/users/addresses", addressRoutes);
+app.use("/api/users/wallet", walletRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api", dietaryRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/ai", aiRoutes);
 
+// Wildcard fallback for React Router SPA
+// app.get("/*", (req, res, next) => {
+//   if (req.path.startsWith("/api") || req.path.startsWith("/uploads") || req.path.startsWith("/socket.io")) {
+//     return next();
+//   }
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
+app.use((req, res, next) => {
+  if (
+    req.path.startsWith("/api") ||
+    req.path.startsWith("/uploads") ||
+    req.path.startsWith("/socket.io")
+  ) {
+    return next();
+  }
+
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 
 
@@ -107,6 +133,3 @@ server.on('error', (err) => {
     throw err;
   }
 });
-
-
-

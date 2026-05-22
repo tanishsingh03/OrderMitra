@@ -1,0 +1,117 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  READY_FOR_PICKUP
+  ASSIGNED
+  AT_RESTAURANT
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  COD
+  UPI
+  CARD
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id              Int            @id @default(autoincrement())
+  orderNumber     String         @unique
+  userId          Int
+  restaurantId    Int
+  deliveryPartnerId Int?
+  addressId       Int?
+  totalPrice      Float
+  subtotal        Float          @default(0)
+  deliveryFee     Float          @default(0)
+  discount        Float          @default(0)
+  tax             Float          @default(0)
+  status          OrderStatus    @default(PLACED)
+  paymentMethod   PaymentMethod  @default(COD)
+  paymentStatus   PaymentStatus  @default(PENDING)
+  scheduledFor    DateTime?
+  estimatedTime   Int?
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
+  cancellationReason String?
+  user            User           @relation(fields: [userId], references: [id])
+  restaurant      Restaurant     @relation(fields: [restaurantId], references: [id])
+  address         Address?       @relation(fields: [addressId], references: [id])
+  items           OrderItem[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int
+  price      Float    @default(0)
+  notes      String?
+
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model MenuItem {
+  id            Int         @id @default(autoincrement())
+  name          String
+  price         Float
+  image         String?
+  description   String?
+  category      String?
+  isAvailable   Boolean     @default(true)
+  restaurantId  Int
+  orderItems    OrderItem[]
+}
+
+model Restaurant {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  address     String
+  email       String   @unique
+  phone       String?
+  image       String?
+  rating      Float    @default(0)
+  totalRatings Int     @default(0)
+  orders      Order[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  phone     String?
+  orders    Order[]
+}
+
+model Address {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  label     String
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  orders    Order[]
+}

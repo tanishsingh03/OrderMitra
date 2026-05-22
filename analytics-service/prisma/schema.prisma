@@ -1,0 +1,81 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  READY_FOR_PICKUP
+  ASSIGNED
+  AT_RESTAURANT
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  COD
+  UPI
+  CARD
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id              Int            @id @default(autoincrement())
+  orderNumber     String         @unique
+  userId          Int
+  restaurantId    Int
+  deliveryPartnerId Int?
+  totalPrice      Float
+  status          OrderStatus    @default(PLACED)
+  paymentMethod   PaymentMethod  @default(COD)
+  paymentStatus   PaymentStatus  @default(PENDING)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  items           OrderItem[]
+  restaurant      Restaurant     @relation(fields: [restaurantId], references: [id])
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int
+  price      Float
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model MenuItem {
+  id           Int         @id @default(autoincrement())
+  name         String
+  price        Float
+  restaurantId Int
+  orderItems   OrderItem[]
+}
+
+model Restaurant {
+  id      Int     @id @default(autoincrement())
+  name    String?
+  orders  Order[]
+}
+
+model Payment {
+  id      Int           @id @default(autoincrement())
+  orderId Int           @unique
+  amount  Float
+  status  PaymentStatus
+}

@@ -7,6 +7,6 @@ const { authenticate } = require("../Middleware/auth.middleware");
 router.get("/", authenticate, getWallet);
 router.get("/transactions", authenticate, getTransactions);
 router.post("/add-money", authenticate, addMoney);
+router.post("/topup", authenticate, addMoney);
 
 module.exports = router;
-

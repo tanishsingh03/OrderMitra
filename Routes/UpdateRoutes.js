@@ -24,5 +24,6 @@ router.get("/customer/me", authenticate, getCustomerProfile);
 
 // UPDATE customer profile
 router.put("/customer/update", authenticate, updateCustomer);
+router.put("/users/update-profile", authenticate, updateCustomer);
 
 module.exports = router;

@@ -87,28 +87,39 @@ async function signup(req, res) {
 
 async function login(req, res) {
     try {
-        const { email, password } = req.body;
+        const { email, password, role: requestedRole } = req.body;
 
         if (!email || !password) {
             return res.json({ success: false, message: "All fields required" });
         }
 
-        let user = await prisma.user.findUnique({ where: { email } });
-        let role = "customer";
+        let user = null;
+        let role = requestedRole === "restaurant-owner" ? "restaurant-owner" : "customer";
 
-        if (!user) {
+        if (role === "restaurant-owner") {
             user = await prisma.restaurant.findUnique({ where: { email } });
-            role = "restaurant-owner";
+        } else {
+            user = await prisma.user.findUnique({ where: { email } });
         }
 
-        // If still not found
         if (!user) {
-            return res.json({ success: false, message: "Account not found" });
+            const otherAccount = role === "restaurant-owner"
+                ? await prisma.user.findUnique({ where: { email } })
+                : await prisma.restaurant.findUnique({ where: { email } });
+
+            if (otherAccount) {
+                return res.json({
+                    success: false,
+                    message: `This email belongs to a ${role === "restaurant-owner" ? "customer" : "restaurant partner"} account. Select the correct login tab.`
+                });
+            }
+
+            return res.json({ success: false, message: `No ${role === "restaurant-owner" ? "restaurant partner" : "customer"} account found for this email.` });
         }
 
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) {
-            return res.json({ success: false, message: "Invalid password" });
+            return res.json({ success: false, message: "Invalid password for this account." });
         }
 
         // const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1d" });
@@ -353,5 +364,4 @@ async function changePassword(req, res) {
 }
 
 module.exports = { signup, login, forgotPassword, resetPassword, changePassword };
-
 

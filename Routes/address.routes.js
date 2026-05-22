@@ -15,6 +15,6 @@ router.post("/", authenticate, addAddress);
 router.put("/:addressId", authenticate, updateAddress);
 router.delete("/:addressId", authenticate, deleteAddress);
 router.post("/:addressId/default", authenticate, setDefaultAddress);
+router.put("/:addressId/default", authenticate, setDefaultAddress);
 
 module.exports = router;
-

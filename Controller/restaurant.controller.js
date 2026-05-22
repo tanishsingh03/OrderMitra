@@ -268,7 +268,7 @@ async function addMenuItem(req, res) {
             return res.json({ success: false, message: "Access denied" });
         }
 
-        const { name, price } = req.body;
+        const { name, price, description, category } = req.body;
 
         if (!name || !price) {
             return res.json({ success: false, message: "Name & Price required" });
@@ -280,6 +280,8 @@ async function addMenuItem(req, res) {
             data: {
                 name,
                 price: Number(price),
+                description,
+                category,
                 image,
                 restaurantId: req.user.id
             }
@@ -543,4 +545,3 @@ module.exports = {
     getRestaurantOrders,
     updateOrderStatus
 };
-

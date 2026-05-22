@@ -1,0 +1,92 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  READY_FOR_PICKUP
+  ASSIGNED
+  AT_RESTAURANT
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  orderNumber     String      @unique
+  userId          Int
+  restaurantId    Int
+  totalPrice      Float
+  status          OrderStatus @default(PLACED)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int
+  price      Float
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model MenuItem {
+  id           Int         @id @default(autoincrement())
+  name         String
+  price        Float
+  restaurantId Int
+  orderItems   OrderItem[]
+}
+
+model AIRecommendation {
+  id                 Int      @id @default(autoincrement())
+  restaurantId       Int
+  recommendationType String
+  title              String
+  description        String
+  confidenceScore    Float    @default(0)
+  priorityLevel      String   @default("medium")
+  status             String   @default("open")
+  metadata           Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([restaurantId, createdAt])
+  @@index([recommendationType])
+}
+
+model AIChatHistory {
+  id           Int      @id @default(autoincrement())
+  restaurantId Int
+  message      String
+  response     String
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([restaurantId, createdAt])
+}
+
+model AIAnalyticsSnapshot {
+  id                 Int      @id @default(autoincrement())
+  restaurantId       Int
+  revenue            Float    @default(0)
+  orders             Int      @default(0)
+  customerRetention  Float    @default(0)
+  deliveryEfficiency Float    @default(0)
+  topDishes          Json?
+  snapshot           Json?
+  createdAt          DateTime @default(now())
+
+  @@index([restaurantId, createdAt])
+}

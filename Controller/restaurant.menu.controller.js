@@ -11,7 +11,9 @@ exports.getMenu = async (req, res) => {
         }
 
         const menu = await prisma.menuItem.findMany({
-            where: { restaurantId: req.user.id }
+            where: { restaurantId: req.user.id },
+            include: { tags: true },
+            orderBy: { updatedAt: "desc" }
         });
 
         return res.json({ success: true, menu });
@@ -26,8 +28,8 @@ exports.getMenu = async (req, res) => {
 // ------------------------------
 exports.addMenuItem = async (req, res) => {
     try {
-        const { name, price } = req.body;
-        const image = req.file ? req.file.filename : null; // multer stores filename
+        const { name, price, description, category } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         if (!name || !price) {
             return res.json({ success: false, message: "Name & price required" });
@@ -37,7 +39,9 @@ exports.addMenuItem = async (req, res) => {
             data: {
                 name,
                 price: Number(price),
-                image: image,
+                description,
+                category,
+                image,
                 restaurantId: req.user.id
             }
         });
@@ -66,19 +70,23 @@ exports.addMenuItem = async (req, res) => {
 exports.updateMenuItem = async (req, res) => {
     try {
         const id = Number(req.params.id);
-        const { name, price } = req.body;
+        const { name, price, description, category, isAvailable } = req.body;
 
-        const image = req.file ? req.file.filename : null;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         const updatedData = {
             ...(name && { name }),
             ...(price && { price: Number(price) }),
+            ...(description !== undefined && { description }),
+            ...(category !== undefined && { category }),
+            ...(isAvailable !== undefined && { isAvailable: String(isAvailable) === "true" || isAvailable === true }),
             ...(image && { image })
         };
 
         const item = await prisma.menuItem.update({
             where: { id },
-            data: updatedData
+            data: updatedData,
+            include: { tags: true }
         });
 
         // Broadcast menu update via WebSocket

@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:15-alpine
@@ -7,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ordermitra123}
       POSTGRES_DB: ${POSTGRES_DB:-ordermitra}
     ports:
-      - "5433:5432"  # External port 5433, internal port 5432
+      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -16,6 +18,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ordermitra-network
 
   redis:
     image: redis:7-alpine
@@ -31,36 +35,226 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ordermitra-network
 
-  app:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ordermitra-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ordermitra-network
+
+  api-gateway:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: ordermitra-app
+      dockerfile: api-gateway/Dockerfile
+    container_name: ordermitra-api-gateway
     ports:
       - "6789:6789"
     environment:
-      - NODE_ENV=production
       - PORT=6789
+      - JWT_SECRET=${JWT_SECRET:-secret123}
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - USER_SERVICE_URL=http://user-service:3002
+      - RESTAURANT_SERVICE_URL=http://restaurant-service:3003
+      - ORDER_SERVICE_URL=http://order-service:3004
+      - DELIVERY_SERVICE_URL=http://delivery-service:3005
+      - PAYMENT_SERVICE_URL=http://payment-service:3006
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3007
+      - ANALYTICS_SERVICE_URL=http://analytics-service:3008
+      - AI_SERVICE_URL=http://ai-recommendation-service:3009
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - ordermitra-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: ordermitra-auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
       - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
-      - EMAIL_HOST=${EMAIL_HOST:-smtp.gmail.com}
-      - EMAIL_PORT=${EMAIL_PORT:-587}
-      - EMAIL_USER=${EMAIL_USER:-}
-      - EMAIL_PASS=${EMAIL_PASS:-}
-    volumes:
-      - ./uploads:/app/uploads
-      - ./public:/app/public
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - JWT_SECRET=${JWT_SECRET:-secret123}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: ordermitra-user-service
+    environment:
+      - PORT=3002
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  restaurant-service:
+    build:
+      context: .
+      dockerfile: restaurant-service/Dockerfile
+    container_name: ordermitra-restaurant-service
+    environment:
+      - PORT=3003
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-secret123}
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-    restart: unless-stopped
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: ordermitra-order-service
+    environment:
+      - PORT=3004
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  delivery-service:
+    build:
+      context: .
+      dockerfile: delivery-service/Dockerfile
+    container_name: ordermitra-delivery-service
+    environment:
+      - PORT=3005
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    container_name: ordermitra-payment-service
+    environment:
+      - PORT=3006
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: ordermitra-notification-service
+    environment:
+      - PORT=3007
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: analytics-service/Dockerfile
+    container_name: ordermitra-analytics-service
+    environment:
+      - PORT=3008
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
+
+  ai-recommendation-service:
+    build:
+      context: .
+      dockerfile: ai-recommendation-service/Dockerfile
+    container_name: ordermitra-ai-recommendation-service
+    environment:
+      - PORT=3009
+      - DATABASE_URL=postgresql://ordermitra:ordermitra123@postgres:5432/ordermitra
+      - REDIS_URL=redis://redis:6379
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - AI_PROVIDER=${AI_PROVIDER:-gemini}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4.1-mini}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - ordermitra-network
 
 volumes:
   postgres-data:
   redis-data:
 
+networks:
+  ordermitra-network:
+    driver: bridge

@@ -4,6 +4,36 @@ let io = null;
 let pub = null;
 let sub = null;
 
+function emitOrderUpdate(data) {
+    if (!io) return;
+
+    if (data.userId) {
+        io.to(`user_${data.userId}`).emit("order_update", data);
+        console.log(`📤 Emitted order_update to user_${data.userId}`);
+    }
+    if (data.restaurantId) {
+        io.to(`restaurant_${data.restaurantId}`).emit("order_update", data);
+        console.log(`📤 Emitted order_update to restaurant_${data.restaurantId}`);
+    }
+    if (data.deliveryPartnerId) {
+        io.to(`delivery_${data.deliveryPartnerId}`).emit("order_update", data);
+        console.log(`📤 Emitted order_update to delivery_${data.deliveryPartnerId}`);
+    }
+
+    if (data.type === "NEW_ORDER_READY") {
+        io.emit("new_order_available", data);
+    }
+    io.emit("order_list_update", data);
+}
+
+function emitRatingUpdate(data) {
+    if (!io) return;
+
+    if (data.userId) io.to(`user_${data.userId}`).emit("rating_update", data);
+    if (data.deliveryPartnerId) io.to(`delivery_${data.deliveryPartnerId}`).emit("rating_update", data);
+    if (data.restaurantId) io.to(`restaurant_${data.restaurantId}`).emit("rating_update", data);
+}
+
 async function socketServer(server) {
     io = require("socket.io")(server, {
         cors: {
@@ -52,24 +82,16 @@ async function socketServer(server) {
                 if (channel === "new_order_available") {
                     // New order available for delivery partners
                     console.log("📦 New order available for delivery:", data.orderId);
-                    // Broadcast to all online delivery partners
-                    io.emit("new_order_available", data);
+                    // Also send the normal order_update event so customers and restaurants
+                    // update status without requiring a manual refresh.
+                    emitOrderUpdate(data);
                     return;
                 }
 
                 if (channel === "rating_updates") {
                     // Rating update
                     console.log("⭐ Rating update:", data);
-                    // Emit to relevant rooms
-                    if (data.userId) {
-                        io.to(`user_${data.userId}`).emit("rating_update", data);
-                    }
-                    if (data.deliveryPartnerId) {
-                        io.to(`delivery_${data.deliveryPartnerId}`).emit("rating_update", data);
-                    }
-                    if (data.restaurantId) {
-                        io.to(`restaurant_${data.restaurantId}`).emit("rating_update", data);
-                    }
+                    emitRatingUpdate(data);
                     return;
                 }
 
@@ -88,24 +110,7 @@ async function socketServer(server) {
                 }
 
                 console.log("📢 Redis Broadcast:", data);
-
-                // Emit to customer room
-                if (data.userId) {
-                    io.to(`user_${data.userId}`).emit("order_update", data);
-                    console.log(`📤 Emitted to user_${data.userId}`);
-                }
-                // Emit to restaurant room
-                if (data.restaurantId) {
-                    io.to(`restaurant_${data.restaurantId}`).emit("order_update", data);
-                    console.log(`📤 Emitted to restaurant_${data.restaurantId}`);
-                }
-                // Emit to delivery partner room
-                if (data.deliveryPartnerId) {
-                    io.to(`delivery_${data.deliveryPartnerId}`).emit("order_update", data);
-                    console.log(`📤 Emitted to delivery_${data.deliveryPartnerId}`);
-                }
-                // Also emit to all connected clients for order list updates
-                io.emit("order_list_update", data);
+                emitOrderUpdate(data);
             } catch (err) {
                 console.error("Error parsing Redis message:", err);
             }
@@ -163,7 +168,9 @@ async function socketServer(server) {
 // Function to publish order updates (can be called from controllers)
 async function publishOrderUpdate(data) {
     if (!pub) {
-        console.error("❌ Redis publisher not initialized!");
+        console.error("❌ Redis publisher not initialized! Emitting directly through Socket.io.");
+        if (data.type === "RATING_ADDED" || data.type === "rating_update") emitRatingUpdate(data);
+        else emitOrderUpdate(data);
         return;
     }
 
@@ -183,31 +190,13 @@ async function publishOrderUpdate(data) {
         const result = await pub.publish(channel, message);
         console.log(`📤 Published ${channel} to ${result} subscribers:`, data);
 
-        // Also emit directly via Socket.io as fallback
+        // Also emit directly via Socket.io so the current server instance updates
+        // immediately even before Redis fan-out completes.
         if (io) {
             if (data.type === "RATING_ADDED" || data.type === "rating_update") {
-                // Rating updates
-                if (data.userId) {
-                    io.to(`user_${data.userId}`).emit("rating_update", data);
-                }
-                if (data.deliveryPartnerId) {
-                    io.to(`delivery_${data.deliveryPartnerId}`).emit("rating_update", data);
-                }
-                if (data.restaurantId) {
-                    io.to(`restaurant_${data.restaurantId}`).emit("rating_update", data);
-                }
+                emitRatingUpdate(data);
             } else {
-                // Order updates
-                if (data.userId) {
-                    io.to(`user_${data.userId}`).emit("order_update", data);
-                }
-                if (data.restaurantId) {
-                    io.to(`restaurant_${data.restaurantId}`).emit("order_update", data);
-                }
-                if (data.deliveryPartnerId) {
-                    io.to(`delivery_${data.deliveryPartnerId}`).emit("order_update", data);
-                }
-                io.emit("order_list_update", data);
+                emitOrderUpdate(data);
             }
         }
     } catch (err) {
@@ -216,23 +205,9 @@ async function publishOrderUpdate(data) {
         if (io) {
             console.log("🔄 Using Socket.io fallback (Redis unavailable)");
             if (data.type === "RATING_ADDED" || data.type === "rating_update") {
-                if (data.userId) {
-                    io.to(`user_${data.userId}`).emit("rating_update", data);
-                }
-                if (data.deliveryPartnerId) {
-                    io.to(`delivery_${data.deliveryPartnerId}`).emit("rating_update", data);
-                }
-                if (data.restaurantId) {
-                    io.to(`restaurant_${data.restaurantId}`).emit("rating_update", data);
-                }
+                emitRatingUpdate(data);
             } else {
-                if (data.userId) {
-                    io.to(`user_${data.userId}`).emit("order_update", data);
-                }
-                if (data.restaurantId) {
-                    io.to(`restaurant_${data.restaurantId}`).emit("order_update", data);
-                }
-                io.emit("order_list_update", data);
+                emitOrderUpdate(data);
             }
         }
     }

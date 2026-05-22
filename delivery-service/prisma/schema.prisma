@@ -1,0 +1,54 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  READY_FOR_PICKUP
+  ASSIGNED
+  AT_RESTAURANT
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model DeliveryPartner {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  phone         String
+  vehicleType   String?
+  vehicleNumber String?
+  licenseNumber String?
+  isOnline      Boolean        @default(false)
+  isAvailable   Boolean        @default(true)
+  latitude      Float?
+  longitude     Float?
+  rating        Float          @default(0)
+  totalRatings  Int            @default(0)
+  isVerified    Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  orders        Order[]
+}
+
+model Order {
+  id              Int              @id @default(autoincrement())
+  orderNumber     String           @unique
+  userId          Int
+  restaurantId    Int
+  deliveryPartnerId Int?
+  totalPrice      Float
+  status          OrderStatus      @default(PLACED)
+  deliveryPartner DeliveryPartner? @relation(fields: [deliveryPartnerId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
